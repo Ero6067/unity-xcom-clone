@@ -38,7 +38,7 @@ public struct GridPosition : IEquatable<GridPosition>
 
     public static bool operator == (GridPosition a, GridPosition b) 
     {
-        return a.x == b.x&& a.z == b.z ;
+        return a.x == b.x && a.z == b.z ;
     }
 
     public static bool operator != (GridPosition a, GridPosition b)
