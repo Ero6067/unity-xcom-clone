@@ -1,60 +1,55 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 using Cinemachine;
 
 public class CameraController : MonoBehaviour
 {
+
     private const float MIN_FOLLOW_Y_OFFSET = 2f;
     private const float MAX_FOLLOW_Y_OFFSET = 12f;
+
     [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
 
     private CinemachineTransposer cinemachineTransposer;
     private Vector3 targetFollowOffset;
 
-    //Zoom Params
-    [SerializeField] float zoomAmount = 1f;
-    [SerializeField] float zoomSpeed = 25f;
-
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         cinemachineTransposer = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>();
         targetFollowOffset = cinemachineTransposer.m_FollowOffset;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         HandleMovement();
         HandleRotation();
         HandleZoom();
     }
+
     private void HandleMovement()
     {
-        //Camera Movement Keybinds
-        Vector3 inputMoveDirection = new Vector3(0, 0, 0);
+        Vector3 inputMoveDir = new Vector3(0, 0, 0);
         if (Input.GetKey(KeyCode.W))
         {
-            inputMoveDirection.z = +1f;
+            inputMoveDir.z = +1f;
         }
         if (Input.GetKey(KeyCode.S))
         {
-            inputMoveDirection.z = -1f;
+            inputMoveDir.z = -1f;
         }
         if (Input.GetKey(KeyCode.A))
         {
-            inputMoveDirection.x = -1f;
+            inputMoveDir.x = -1f;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            inputMoveDirection.x = +1f;
+            inputMoveDir.x = +1f;
         }
 
         float moveSpeed = 10f;
 
-        Vector3 moveVector = transform.forward * inputMoveDirection.z + transform.right * inputMoveDirection.x;
+        Vector3 moveVector = transform.forward * inputMoveDir.z + transform.right * inputMoveDir.x;
         transform.position += moveVector * moveSpeed * Time.deltaTime;
     }
 
@@ -66,7 +61,6 @@ public class CameraController : MonoBehaviour
         {
             rotationVector.y = +1f;
         }
-
         if (Input.GetKey(KeyCode.E))
         {
             rotationVector.y = -1f;
@@ -78,16 +72,21 @@ public class CameraController : MonoBehaviour
 
     private void HandleZoom()
     {
+        float zoomAmount = 1f;
         if (Input.mouseScrollDelta.y > 0)
         {
-            targetFollowOffset.y += zoomAmount * zoomSpeed * Time.deltaTime;
+            targetFollowOffset.y -= zoomAmount;
         }
         if (Input.mouseScrollDelta.y < 0)
         {
-            targetFollowOffset.y -= zoomAmount * zoomSpeed * Time.deltaTime;
+            targetFollowOffset.y += zoomAmount;
         }
+
         targetFollowOffset.y = Mathf.Clamp(targetFollowOffset.y, MIN_FOLLOW_Y_OFFSET, MAX_FOLLOW_Y_OFFSET);
 
-        cinemachineTransposer.m_FollowOffset = Vector3.Lerp(cinemachineTransposer.m_FollowOffset, targetFollowOffset, Time.deltaTime * zoomSpeed);
+        float zoomSpeed = 5f;
+        cinemachineTransposer.m_FollowOffset =
+            Vector3.Lerp(cinemachineTransposer.m_FollowOffset, targetFollowOffset, Time.deltaTime * zoomSpeed);
     }
+
 }
