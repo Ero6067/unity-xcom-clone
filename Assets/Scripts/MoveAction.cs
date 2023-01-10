@@ -63,7 +63,7 @@ public class MoveAction : MonoBehaviour
             {
                 GridPosition offsetGridPosition = new GridPosition(x, z);
                 GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
-
+                Debug.Log(testGridPosition);
                 if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
                 {
                     continue;
