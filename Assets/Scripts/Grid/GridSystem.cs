@@ -68,4 +68,18 @@ public class GridSystem
                 gridPosition.z < height;
     }
 
+    // Makes the width and height accessible without making the variable public
+    public int GetWidth()
+    {
+        return width;
+    }
+
+    public int GetHeight()
+    {
+        return height;
+
+
+
+    }
+
 }
