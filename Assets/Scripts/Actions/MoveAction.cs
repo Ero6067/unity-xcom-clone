@@ -11,8 +11,6 @@ public class MoveAction : BaseAction
 
     private Vector3 targetPosition;
 
-
-
     protected override void Awake()
     {
         base.Awake();
@@ -40,6 +38,7 @@ public class MoveAction : BaseAction
         {
             unitAnimator.SetBool("IsWalking", false);
             isActive = false;
+            onActionComplete();
         }
 
         float rotateSpeed = 10f;
@@ -47,13 +46,12 @@ public class MoveAction : BaseAction
     }
 
 
-
     public void Move(GridPosition gridPosition, Action onActionComplete)
     {
+        this.onActionComplete = onActionComplete;
         this.targetPosition = LevelGrid.Instance.GetWorldPosition(gridPosition);
         isActive = true;
     }
-   
 
     public bool IsValidActionGridPosition(GridPosition gridPosition)
     {
@@ -73,10 +71,9 @@ public class MoveAction : BaseAction
             {
                 GridPosition offsetGridPosition = new GridPosition(x, z);
                 GridPosition testGridPosition = unitGridPosition + offsetGridPosition;
-                //Debug.Log(testGridPosition);
+
                 if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
                 {
-                    // Checks for Grid Positions within legal bounds
                     continue;
                 }
 
@@ -98,5 +95,8 @@ public class MoveAction : BaseAction
 
         return validGridPositionList;
     }
-
+    public override string GetActionName()
+    {
+        return "Move";
+    }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public abstract class BaseAction : MonoBehaviour
 {
+
     protected Unit unit;
     protected bool isActive;
     protected Action onActionComplete;
@@ -13,4 +14,5 @@ public abstract class BaseAction : MonoBehaviour
     {
         unit = GetComponent<Unit>();
     }
+    public abstract string GetActionName();
 }
